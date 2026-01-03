@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Analysis: Dresden (2015-2024)</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Minimalist Color Palette */
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #595959;
+            --accent: #2c3e50; /* Deep blue-grey */
+            --border-radius: 8px;
+            --spacing: 2rem;
+            --max-width: 900px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Layout */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            text-align: justify
+        }
+
+        /* Header Section */
+        header {
+            margin-bottom: 4rem;
+            border-bottom: 1px solid #e5e5e5;
+            padding-bottom: 2rem;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 2.5rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        /* Content Sections */
+        section {
+            margin-bottom: 4rem;
+            opacity: 0; /* Animation start state */
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* The Plot Container - The styling for your charts */
+        .plot-container {
+            background: var(--card-bg);
+            border: 1px solid #eaeaea;
+            border-radius: var(--border-radius);
+            padding: 2px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            margin-bottom: 1px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px; /* Default height for placeholder */
+        }
+
+        /* Styling for images if you use static plots */
+        .plot-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 6rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            border-top: 1px solid #e5e5e5;
+            padding-top: 2rem;
+        }
+
+        /* Simple Animation */
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Stagger animations for sections */
+        section:nth-child(1) { animation-delay: 0.1s; }
+        section:nth-child(2) { animation-delay: 0.2s; }
+        section:nth-child(3) { animation-delay: 0.3s; }
+        section:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container { padding: 2rem 1.5rem; }
+            h1 { font-size: 2rem; }
+            .plot-container { padding: 2px; min-height: 250px; }
+        }
+        .table-container {
+            overflow-x: auto; /* Makes it scrollable on mobile */
+            margin: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+
+        th {
+            padding: 12px 15px;
+            border-bottom: 2px solid var(--accent);
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.8rem;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            color: var(--text-secondary);
+        }
+
+        /* Zebra striping - optional, but helps readability */
+        tbody tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        /* Hover effect to help the eye follow rows */
+        tbody tr:hover {
+            background-color: rgba(44, 62, 80, 0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header>
+            <h1>Weather Pattern Analysis</h1>
+            <div class="subtitle">Dresden, Germany (2015-2024)</div>
+        </header>
+
+        <section>
+            <h2>Overview</h2>
+            <p>
+                This report analyzes meteorological data collected in Dresden over the past decade(1 Jan 2015 – 31 Dec 2024) using multi-temporal resolution weather datasets.. 
+                The focus is on identifying long-term trends and patterns in temperature, precipitation distribution, wind 
+                and seasonal shifts. The initial phase of our meteorological data analysis focuses on establishing a comprehensive understanding of the general weather patterns in Dresden. By first aggregating and examining the long-term data, we define the city's baseline climatology, which serves as the essential reference point for measuring deviations identified in the higher temporal resolution data.
+            </p> 
+            <h3 style="margin-top: 1rem;">Dataset Resolutions</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Resolution</th>
+                            <th>Records</th>
+                            <th>Key Parameters</th>
+                            <th>Primary Use</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Daily</strong></td>
+                            <td>3,653</td>
+                            <td>Mean/Min/Max Temp, Rain, Snow</td>
+                            <td>Long-term trends & seasonality</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hourly</strong></td>
+                            <td>87,672</td>
+                            <td>Humidity, Cloud coverage, Wind</td>
+                            <td>Diurnal (daily) cycles</td>
+                        </tr>
+                        <tr>
+                            <td><strong>10-Minute</strong></td>
+                            <td>526,032</td>
+                            <td><strong>Wind Gusts</strong>, Variability</td>
+                            <td>Short-term extreme events</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <section>
+            <h2>Temperature Anomalies</h2>
+            <p>
+                We begin this overview with an analysis of temperature, examining its overall range, mean values, and seasonal patterns. The table below presents the fundamental temperature statistics derived from the 10-year dataset:
+            </p>
+            <div>
+                <table class="table-container">
+                    <thead>
+                    <tr>
+                        <th> </th>
+                        <th>Mean</th>
+                        <th>Max</th>
+                        <th>Min</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Daily mean values</td>
+                        <td>10.8</td>
+                        <td>29.9</td>
+                        <td>-12.3</td>
+                    </tr>
+                    <tr>
+                        <td>Daily max values</td>
+                        <td>15.0</td>
+                        <td>38.2</td>
+                        <td>-9.5</td>
+                    </tr>
+                    <tr>
+                        <td>Daily min values</td>
+                        <td>6.58		</td>
+                        <td>23.2</td>
+                        <td>-16.2</td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+            <p>
+                These values indicate a temperate climate with significant seasonal variation, where temperatures can range from well below freezing in winter to over 38°C during summer heat events.
+            </p>
+            <p >
+                The daily temperature range (difference between daily maximum and minimum) was calculated for each day and then averaged to produce a mean value for each month. The resulting monthly averages are presented in the heatmap. As can be seen, the temperature range varies considerably throughout the year, with the highest ranges occurring during spring and summer months (April through September), often exceeding 10°C. In contrast, winter months (December through February) exhibit smaller temperature ranges, typically between 4-7°C, indicating more stable conditions with less diurnal variation.
+            </p>
+            <div class="plot-container">
+                <img src="assets/Picture1.png" alt="mean Temperature range heatmap">
+            </div>
+            <p>The monthly mean temperature heatmap reveals clear seasonal cycles across all years:</p>
+              <div class="plot-container">
+                <img src="assets/Picture2.png" alt="mean Temperature heatmap">
+            </div>
+            <p>From the following plot it can be seen that 60% of daily temperature observations fall within the orange band shown,  the variability bands are wider during winter months (indicated by the expanded pink outer band), suggesting greater day-to-day temperature fluctuations during this season compared to the more stable summer period.</p>
+            <div class="plot-container">
+                <img src="assets/Picture3.png" alt="...">
+            </div>
+        </section>
+        <section>
+            <h2>Cloud Coverage</h2>
+            <p>After analyzing temperature patterns, we examine cloud coverage, which directly affects both temperature and precipitation in the region. Cloud cover is categorized into three main groups based on the percentage of sky coverage: Clear (<25%), Partly Cloudy (25-75%), and Overcast (>75%). </p>
+            <p>The stacked bar chart shows the distribution of cloud coverage categories as a percentage of days for each month, averaged across the 10-year period. </p>
+            <div class="plot-container">
+                <img src="assets/Picture6.png" alt="...">
+            </div>
+            <p>The heavy cloud coverage during winter aligns with the reduced temperature variability observed in the earlier temperature analysis. In summer, the increased amount of clear and partly cloudy days corresponds with the higher temperature ranges observed during these months. This seasonal pattern suggests that operational planning should account for reduced visibility and increased cloud cover during the winter period, while summer months provide more consistent favorable sky conditions.</p>
+
+        </section>
+
+        <section>
+            <h2>Precipitation Patterns</h2>
+            <p>
+               Having examined cloud coverage patterns, we now turn our attention to precipitation, which is directly generated by these cloud systems. Understanding both the intensity and frequency of precipitation events is essential for assessing moisture availability and planning field operations. 
+            </p>
+            <div class="plot-container">
+                <img src="assets/Picture7.png" alt="...">
+            </div>
+            <p>The first heatmap shows the mean daily precipitation amounts throughout the years. As can be seen, the precipitation amounts are generally not very high, mostly ranging between 0.1 to 4.2 mm per day. So, Dresden experiences moderate rainfall year-round and no single month is extremely rainy. Overall, summer brings more showers (wettest months are typically June, July, August), while autumn and winter generally have less precipitation.</p>
+            <p>From an operational perspective, these moderate precipitation intensities suggest that when rain does occur, it is generally light to moderate, which may allow for brief operational windows between precipitation events.
+            </p>
+           
+            <div class="plot-container">
+                <img src="assets/Picture8.png" alt="...">
+            </div> 
+            <p>While the amount of rain per day is not critical, we must consider the frequency of rainy days, as this provides important information for scheduling field operations. The second heatmap shows the average number of days per month per year in which we have precipitation greater than 0.1mm. The combination of both metrics intensity and frequency,allows for optimal mission planning by identifying months with both favorable conditions (low amounts and few rainy days) and challenging periods requiring adaptive scheduling strategies.</p>
+        </section>
+        <section>
+            <h2>Humidity </h2>
+            <p>Having analyzed precipitation, we now examine humidity levels, which indicate the amount of moisture present in the atmosphere and directly influence precipitation potential.</p>
+
+            <p>The plot shows the distribution of humidity conditions categorized into three groups: Dry (<50%), Moderate (50-75%), and Humid (>75%). The analysis reveals that Dresden experiences predominantly humid and moderate conditions throughout most of the year.</p>
+            <div class="plot-container">
+                <img src="assets/Picture9.png" alt="...">
+            </div> 
+            <p>Winter months show the highest proportion of humid days. This high humidity during winter aligns with the overcast conditions and moderate precipitation frequency observed in the previous analyses.</p>
+            <p>The spring and summer months show more variability in humidity conditions. The reduced humidity corresponds well with the lower cloud coverage and clearer skies observed during this period. Autumn months show a transition back to more humid conditions.</p>
+            <div class="plot-container">
+                <img src="assets/Picture10.png" alt="...">
+            </div> 
+            <p>The heatmap presents the mean relative humidity values by month and year, ranging from 51% to 90%. The data confirms the seasonal patterns identified in the categorical analysis, with consistently high humidity values during winter months.</p>
+            <p>From an operational perspective, the combination of humidity categories and mean values provides important insights for planning, the favorable conditions with lower humidity levels and higher proportions of moderate to dry days. These conditions, combined with the clearer skies and lower precipitation frequency analyzed earlier, make summer the optimal period for field operations. Conversely, late autumn and winter months present challenging conditions with consistently high humidity levels exceeding 75% on most days, which may affect equipment performance and operational scheduling.</p>
+        </section>
+        <section>
+            <h2>Wind</h2>
+            <p>After examining humidity patterns, we now turn to wind, which represents atmospheric motion and is a critical factor for operational planning. Wind speed and direction influence both flight stability and safety, making it essential to understand wind patterns and their seasonal variations.</p>
+            <p>As the percentile distribution plot suggest the mean sustained wind speed range below operational safety thresholds. The median values closely track the mean, indicating relatively symmetric distributions. The 95th percentile values show seasonal variation from 5.1 m/s in June and July to 8.7 m/s in February, with most months remaining below 8 m/s even at this high percentile.</p>
+            <div class="plot-container">
+                <img src="assets/Picture11.png" alt="...">
+            </div> 
+            <p>Wind gust distributions show greater variability and higher values, as expected. Mean gust speeds range from 9.1 m/s in September to 12.2 m/s in February. The 95th percentile for gusts varies from 15.5 m/s in August to 21.9 m/s in February, indicating that extreme gust events during winter can reach levels requiring operational cessation. The interquartile range (25th-75th percentile) demonstrates that 50% of observations fall within relatively narrow bands, but the wide range between the median and 95th percentile highlights the occurrence of occasional strong gust events.</p>
+            
+            <div class="plot-container">
+                <img src="assets/Picture12.png" alt="...">
+            </div> 
+            <p>The next plot shows the distribution of wind speed conditions categorized into three safety classes: Safe (<8 m/s), Caution (8-12 m/s), and Unsafe (≥12 m/s). The analysis reveals highly favorable wind conditions throughout the year, with safe wind speeds dominating all months.</p>
+            <div class="plot-container">
+                <img src="assets/Picture13.png" alt="...">
+            </div>
+            <p>Unlike sustained wind speeds, wind gusts show considerably more variability and present greater operational challenges. Summer months still offer the best conditions. However, even during favorable months, caution-level gusts occur frequently in most months. Winter and early spring months present the most challenging gust conditions.</p>
+            <div class="plot-container">
+                <img src="assets/Picture14.png" alt="...">
+            </div>
+            <p>This pattern indicates that while sustained winds may be acceptable, gust events require careful monitoring and may necessitate operational pauses during winter months.</p>
+            <p>The next two heatmaps reveal that sustained wind speeds pose minimal constraints throughout the year, however, winter and early spring operations require careful real-time wind monitoring and flexible scheduling to account for frequent gust events that may temporarily halt activities.</p>
+            <div class="plot-container">
+                <img src="assets/Picture15.png" alt="...">
+            </div>
+            <p>While the monthly wind analysis provides valuable insights into seasonal patterns and general safety conditions, operational planning requires understanding wind behavior at finer temporal scales. Wind conditions can vary significantly throughout a single day, with calm mornings potentially transitioning to gusty afternoons due to thermal heating and atmospheric mixing. To capture these diurnal variations and identify optimal operational time windows within each day, we now examine the hourly wind dataset, which reveals detailed patterns in wind speed fluctuations that are masked in monthly averages.</p>
+            <p>The diurnal wind pattern plot reveals a clear daily cycle in wind speed averaged across all 10 years of data.</p>
+            <div class="plot-container">
+                <img src="assets/Picture16.png" alt="...">
+            </div>
+            <p>The overall mean wind speed is 4.16 m/s, well within safe operational limits. Wind speeds exhibit their lowest values during nighttime and early morning hours, with the calmest period occurring at 20:00 (8:00 PM) at 3.7 m/s. From midnight through early morning (00:00-06:00), wind speeds remain relatively stable around 3.8-3.9 m/s.</p>
+            <p>For a better understanding of diurnal pattern variations throughout the year, we group months into seasons and examine how the daily wind cycle differs between winter, spring, summer, and autumn. This seasonal comparison reveals distinct patterns in both wind intensity and diurnal amplitude across different times of year.</p>
+            <div class="plot-container">
+                <img src="assets/Picture17.png" alt="...">
+            </div>
+            <p>Winter shows consistently strong winds throughout the day with minimal diurnal variation. Summer exhibits the calmest conditions with a dramatic daily cycle—exceptionally calm nights transition to midday peaks driven by solar heating, then decline sharply by evening. Spring and Autumn display transitional patterns, with spring combining calm mornings and strong daytime peaks, while autumn gradually shifts from summer's calm to winter's persistent winds.</p>
+            <p>To examine these seasonal patterns in greater detail, we now examine the hourly wind speeds broken down by month.</p>
+            <div class="plot-container">
+                <img src="assets/Picture18.png" alt="...">
+            </div>
+            <p>The heatmap reveals month-to-month variations within each season. Winter months maintain strong winds with subtle differences—January and December show the most intense conditions, while February is slightly calmer. Summer months display consistent sharp diurnal cycles, with June exhibiting the calmest conditions in the entire dataset. Transitional months show progressive changes: spring becomes progressively calmer from March to May with strengthening diurnal amplitude, while autumn reverses this pattern from September's summer-like conditions to November's winter characteristics.</p>
+        </section>
+
+        <section>
+                            
+                <h2 style="margin-top: 1rem;">Techniques used for a EDA (Exploratory Data Analysis)</h2>
+                <ul style="padding-left: 1.2rem; color: var(--text-secondary);">
+                    <li>Descriptive statistics (mean, median, percentiles)</li>
+                    <li>Time series analysis</li>
+                    <li>Diurnal pattern aggregation (hour × month)</li>
+                    <li>Percentile-based analysis (P10, P25, P75, P90, P95, P99)</li>
+                    <li>Correlation analysis</li>
+                    <li>Event identification and duration analysis</li>
+                </ul>
+                <p><strong>Python 3.10 and Libraries: pandas, matplotlib, seaborn, numpy is used for this work.</strong></p>
+                <h3 style="margin-top: 1rem;">And the result shown as:</h3>
+                <ul style="padding-left: 1.2rem; color: var(--text-secondary);">
+                    <li>Time series plots (trends)</li>
+                    <li>Heatmaps (hour × month patterns)</li>
+                    <li>Box plots (seasonal comparisons)</li>
+                    <li>Scatter plots (relationships, discrete events)</li>
+                    <li>Histograms (distributions)</li>
+                    <li>Percentile bands (variability)</li>
+                </ul>
+        </section>
+
+
+
+        <footer>
+            <p>Generated with Python & Data Analysis Tools</p>
+            <p>&copy; 2025 Data Report</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
